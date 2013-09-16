@@ -1,0 +1,169 @@
+<!doctype html>
+<html ng-app="BluetoothApp">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Bluetooth</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+
+  <body>
+    <header class="navbar navbar-inverse navbar-fixed-top" ng-controller="MenuCtrl">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+
+          <a class="brand" href="#/">Bluetooth</a>
+
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li ng-repeat="route in routes" ng-class="{'active': route.name === active}">
+                <a ng-href="#{{route.path}}">{{route.name}}</a>
+              </li>
+            </ul>
+
+            <ul class="nav pull-right">
+              <li>
+                <a href="#select-a-device-modal" role="button" data-toggle="modal" inert>Select a Device</a>
+              </li>
+
+              <li>
+                <a href="#select-a-vehicle-modal" role="button" data-toggle="modal" inert>Select a Vehicle</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Container -->
+    <div class="container" ng-view=""></div>
+
+    <div ng-controller="NavCtrl">
+      <!-- Select Device Modal -->
+      <div id="select-a-device-modal" class="modal hide fade" tabindex="-1">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h3>Select a Device</h3>
+        </div>
+
+        <div class="modal-body">
+          <form class="form" name="DeviceForm">
+            <select type="text" class="input-xxlarge"
+              ng-model="carrier" ng-change="updateCarrier()"
+              ng-options="carrier as carrier.name for carrier in carriers">
+              <option value="" style="display:none;">Select a carrier</option>
+            </select>
+
+            <select type="text" class="input-xxlarge" ng-disabled="!carrier"
+              ng-model="manufacturer" ng-change="updateManufacturer()"
+              ng-options="manufacturer as manufacturer.name for manufacturer in manufacturers">
+              <option value="" style="display:none;">Select a manufacturer</option>
+            </select>
+
+            <select type="text" class="input-xxlarge"
+              ng-model="device" ng-disabled="!manufacturer"
+              ng-options="device as device.name for device in devices">
+              <option value="" style="display:none;">Select a device</option>
+            </select>
+          </form>
+
+          <div class="thumbnail" ng-show="device">
+            <img ng-src="http://gmtotalconnect.com{{device.image}}">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal">Close</button>
+
+          <button class="btn btn-primary" ng-click="setDevice()"
+            ng-disabled="!device" data-dismiss="modal">
+            Submit
+          </button>
+        </div>
+      </div>
+
+      <!-- Select Vehicle Modal -->
+      <div id="select-a-vehicle-modal" class="modal hide fade" tabindex="-1">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h3>Select a Vehicle</h3>
+        </div>
+        <div class="modal-body">
+          <form class="form">
+            <select type="text" class="input-xxlarge"
+              ng-model="make" ng-change="updateMake()"
+              ng-options="make as make.name for make in makes">
+              <option value="" style="display:none;">Select a make</option>
+            </select>
+
+            <select type="text" class="input-xxlarge"
+              ng-model="year" ng-change="updateYear()"
+              ng-options="year as year.value for year in years"
+              ng-disabled="!make">
+              <option value="" style="display:none;">Select a year</option>
+            </select>
+
+            <select type="text" class="input-xxlarge"
+              ng-model="model" ng-change="updateModel()"
+              ng-options="model as model.model for model in models"
+              ng-disabled="!year">
+              <option value="" style="display:none;">Select a models</option>
+            </select>
+
+            <ul class="thumbnails" ng-show="model">
+              <li ng-repeat="radio in model.radios">
+                <div class="thumbnail">
+                  <label for="radio-{{$index}}" class="radio">
+                    <input type="radio" id="radio-{{$index}}"
+                      name="radio" value="{{radio.radioID}}"
+                      ng-model="$parent._radio", ng-change="updateRadio()">
+                    <img ng-src="http://gmtotalconnect.com{{radio.image}}">
+                  </label>
+                </div>
+              </li>
+            </ul>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal">Close</button>
+
+          <button class="btn btn-primary" ng-click="setVehicle()"
+            ng-disabled="!radio" data-dismiss="modal">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="bower_components/jquery/jquery.js"></script>
+    <script src="bower_components/angularjs-unstable/angular.js"></script>
+    <script src="bower_components/angularjs-unstable/angular-resource.js"></script>
+    <script src="bower_components/bootstrap-sass/js/bootstrap-transition.js"></script>
+    <script src="bower_components/bootstrap-sass/js/bootstrap-collapse.js"></script>
+    <script src="bower_components/bootstrap-sass/js/bootstrap-tab.js"></script>
+    <script src="bower_components/bootstrap-sass/js/bootstrap-modal.js"></script>
+
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <!-- Services -->
+    <script src="scripts/services/WS.js"></script>
+    <!-- Directives -->
+    <script src="scripts/directives/inert.js"></script>
+    <!-- Controllers -->
+    <script src="scripts/controllers/nav.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/devices.js"></script>
+    <script src="scripts/controllers/menu.js"></script>
+    <!-- endbuild -->
+  </body>
+</html>

@@ -1,0 +1,68 @@
+<div class="row-fluid">
+  <div class="span12">
+    <div class="hero-unit">
+      <h2>Enjoy every ride without distraction.</h2>
+
+      <p>GM takes Driver Distraction very seriously, which is why we offer Bluetooth technology in most new GM vehicles. Make and receive phone calls without ever fumbling with your cell phone and, if your vehicle is equipped with a compatible radio, stream music through your vehicle's radio.</p>
+
+      <hr>
+
+      <p>Select a <a href="#select-a-device-modal" inert role="button" data-toggle="modal">device</a> or <a href="#select-a-vehicle-modal" inert role="button" data-toggle="modal">vehicle</a> to continue.</p>
+    </div>
+  </div>
+</div>
+
+<div class="row-fluid">
+
+  <div>
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a href="#overview" data-toggle="tab" inert>Overview</a>
+      </li>
+
+      <li>
+        <a href="#compatible" data-toggle="tab" inert>Compatible</a>
+      </li>
+
+      <li>
+        <a href="#instructions" data-toggle="tab" inert>Instructions</a>
+      </li>
+
+      <li class="pull-right">
+        <input type="text" placeholder="search..."
+          class="input-medium search-query"
+          ng-model="search">
+      </li>
+    </ul>
+  </div>
+
+  <div class="tab-content">
+    <div class="tab-pane active" id="overview">
+      <div class="accordion" id="accordion-{{$index}}"
+        ng-repeat="feature in features | orderBy:feature.id | filter:search">
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse"
+              data-parent="#accordion2" href="#collapse-{{$index}}" inert>
+              {{feature.title}}
+            </a>
+          </div>
+
+          <div id="collapse-{{$index}}" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <p ng-bind-html-unsafe="feature.content"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="compatible">
+
+    </div>
+
+    <div class="tab-pane" id="instructions">
+      instructions
+    </div>
+  </div>
+</div>
